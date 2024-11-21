@@ -1,5 +1,5 @@
 "use client";
-import { set, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -17,6 +17,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createAccount } from "@/lib/actions/user.actions";
+import OTPModal from "./OTPModal";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -45,18 +46,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     setErrorMessage("");
 
     try {
-      const user =
-        type === "sign-up"
-          ? await createAccount({
-              fullName: values.fullName || "",
-              email: values.email,
-            })
-          : null;
+      const user = await createAccount({
+        fullName: values.fullName || "",
+        email: values.email,
+      });
 
       setAccountId(user.accountId);
     } catch {
@@ -64,25 +62,51 @@ const AuthForm = ({ type }: { type: FormType }) => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
-        <h1 className="form-title">
-          {type === "sign-in" ? "サインイン" : "サインアップ"}
-        </h1>
-        {type === "sign-up" && (
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
+          <h1 className="form-title">
+            {type === "sign-in" ? "サインイン" : "サインアップ"}
+          </h1>
+          {type === "sign-up" && (
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="shad-form-item">
+                    <FormLabel className="shad-form-label">氏名</FormLabel>
+
+                    <FormControl>
+                      <Input
+                        placeholder="氏名を入力してください"
+                        className="shad-input"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+
+                  <FormMessage className="shad-form-message" />
+                </FormItem>
+              )}
+            />
+          )}
+
           <FormField
             control={form.control}
-            name="fullName"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <div className="shad-form-item">
-                  <FormLabel className="shad-form-label">氏名</FormLabel>
+                  <FormLabel className="shad-form-label">
+                    メールアドレス
+                  </FormLabel>
 
                   <FormControl>
                     <Input
-                      placeholder="氏名を入力してください"
+                      placeholder="メールアドレスを入力してください"
                       className="shad-input"
                       {...field}
                     />
@@ -93,65 +117,45 @@ const AuthForm = ({ type }: { type: FormType }) => {
               </FormItem>
             )}
           />
-        )}
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <div className="shad-form-item">
-                <FormLabel className="shad-form-label">
-                  メールアドレス
-                </FormLabel>
-
-                <FormControl>
-                  <Input
-                    placeholder="メールアドレスを入力してください"
-                    className="shad-input"
-                    {...field}
-                  />
-                </FormControl>
-              </div>
-
-              <FormMessage className="shad-form-message" />
-            </FormItem>
-          )}
-        />
-        <Button
-          type="submit"
-          className="form-submit-button"
-          disabled={isLoading}
-        >
-          {type === "sign-in" ? "サインイン" : "サインアップ"}
-          {isLoading && (
-            <Image
-              src="/assets/icons/loader.svg"
-              alt="loader"
-              width={24}
-              height={24}
-              className="ml-2 animate-spin"
-            />
-          )}
-        </Button>
-        {errorMessage && <p className="error-message">*{errorMessage}</p>}
-
-        <div className="body-2 flex justify-center">
-          <p className="text-light-100">
-            {type === "sign-in"
-              ? "アカウントをお持ちでない場合は"
-              : "アカウントをお持ちの場合は"}
-          </p>
-          <Link
-            href={type === "sign-in" ? "/sign-up" : "/sign-in"}
-            className="ml-1 font-medium text-brand"
+          <Button
+            type="submit"
+            className="form-submit-button"
+            disabled={isLoading}
           >
-            {" "}
-            {type === "sign-in" ? "サインアップ" : "サインイン"}
-          </Link>
-        </div>
-      </form>
-    </Form>
+            {type === "sign-in" ? "サインイン" : "サインアップ"}
+            {isLoading && (
+              <Image
+                src="/assets/icons/loader.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="ml-2 animate-spin"
+              />
+            )}
+          </Button>
+          {errorMessage && <p className="error-message">*{errorMessage}</p>}
+
+          <div className="body-2 flex justify-center">
+            <p className="text-light-100">
+              {type === "sign-in"
+                ? "アカウントをお持ちでない場合は"
+                : "アカウントをお持ちの場合は"}
+            </p>
+            <Link
+              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
+              className="ml-1 font-medium text-brand"
+            >
+              {" "}
+              {type === "sign-in" ? "サインアップ" : "サインイン"}
+            </Link>
+          </div>
+        </form>
+      </Form>
+
+      {accountId && (
+        <OTPModal email={form.getValues("email")} accountId={accountId} />
+      )}
+    </>
   );
 };
 

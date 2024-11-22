@@ -22,9 +22,11 @@ const Page = async ({ params }: SearchParamProps) => {
       </section>
 
       {files.total > 0 ? (
-        files.documents.map((file: Models.Document) => (
-          <Card file={file} key={file.$id} />
-        ))
+        <section className="file-list">
+          {files.documents.map((file: Models.Document) => (
+            <Card key={file.$id} file={file} />
+          ))}
+        </section>
       ) : (
         <p className="empty-list">ファイルがありません</p>
       )}

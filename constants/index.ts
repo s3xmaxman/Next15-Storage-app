@@ -1,26 +1,26 @@
 export const navItems = [
   {
-    name: "Dashboard",
+    name: "ダッシュボード",
     icon: "/assets/icons/dashboard.svg",
     url: "/",
   },
   {
-    name: "Documents",
+    name: "ドキュメント",
     icon: "/assets/icons/documents.svg",
     url: "/documents",
   },
   {
-    name: "Images",
+    name: "画像",
     icon: "/assets/icons/images.svg",
     url: "/images",
   },
   {
-    name: "Media",
+    name: "メディア",
     icon: "/assets/icons/video.svg",
     url: "/media",
   },
   {
-    name: "Others",
+    name: "その他",
     icon: "/assets/icons/others.svg",
     url: "/others",
   },
@@ -28,27 +28,27 @@ export const navItems = [
 
 export const actionsDropdownItems = [
   {
-    label: "Rename",
+    label: "名前変更",
     icon: "/assets/icons/edit.svg",
     value: "rename",
   },
   {
-    label: "Details",
+    label: "詳細",
     icon: "/assets/icons/info.svg",
     value: "details",
   },
   {
-    label: "Share",
+    label: "共有",
     icon: "/assets/icons/share.svg",
     value: "share",
   },
   {
-    label: "Download",
+    label: "ダウンロード",
     icon: "/assets/icons/download.svg",
     value: "download",
   },
   {
-    label: "Delete",
+    label: "削除",
     icon: "/assets/icons/delete.svg",
     value: "delete",
   },
@@ -56,27 +56,27 @@ export const actionsDropdownItems = [
 
 export const sortTypes = [
   {
-    label: "Date created (newest)",
+    label: "作成日時（新しい順）",
     value: "$createdAt-desc",
   },
   {
-    label: "Created Date (oldest)",
+    label: "作成日時（古い順）",
     value: "$createdAt-asc",
   },
   {
-    label: "Name (A-Z)",
+    label: "名前（A-Z）",
     value: "name-asc",
   },
   {
-    label: "Name (Z-A)",
+    label: "名前（Z-A）",
     value: "name-desc",
   },
   {
-    label: "Size (Highest)",
+    label: "サイズ（大きい順）",
     value: "size-desc",
   },
   {
-    label: "Size (Lowest)",
+    label: "サイズ（小さい順）",
     value: "size-asc",
   },
 ];

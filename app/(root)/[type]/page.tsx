@@ -17,7 +17,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
         <h1 className="h1 capitalize">{type}</h1>
         <div className="total-size-section">
           <p className="body-1">
-            トータル: <span className="h5">0 MB</span>
+            ファイル数: <span className="h5">{files.total}</span>
           </p>
 
           <div className="sort-container">
